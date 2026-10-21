@@ -17,7 +17,7 @@ function Help({ open, onClose, children }: { open: boolean; onClose: () => void;
   return (
     <dialog ref={ref} onClose={onClose} onClick={e => { if (e.target === ref.current) onClose() }}
       className="m-auto w-[min(820px,calc(100vw-32px))] border-2 border-ink bg-white p-0 text-ink backdrop:bg-[rgba(11,11,13,0.62)]">
-      <div className="flex flex-col gap-4 p-7">{open && children}<button type="button" className={`${btn.primary} self-end`} onClick={onClose}>知道了</button></div>
+      <div className="flex flex-col gap-4 p-7 max-md:p-4">{open && children}<button type="button" className={`${btn.primary} self-end`} onClick={onClose}>知道了</button></div>
     </dialog>
   )
 }
@@ -61,10 +61,10 @@ export default function Block({ me, id }: { me: Me; id: string }) {
     <Shell me={me} active="work">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-3">
-          <a href={`#/jobs/${id}`} className="flex min-h-8 items-center self-start font-tc text-sm text-dim no-underline">← 工作詳情</a>
+          <a href={`#/jobs/${id}`} className="flex min-h-8 items-center self-start font-tc text-sm text-dim no-underline max-md:min-h-11">← 工作詳情</a>
           <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2.5">
-            <h1 className="m-0 font-tc text-[34px] font-bold">先告訴系統參考文獻在哪</h1><span className="text-lg font-semibold">{job.filename}</span><Tag>{job.mode}</Tag>
-            <button type="button" className={`${btn.outline} ml-auto`} onClick={() => setHelp(true)}>教學：這一頁要做什麼</button>
+            <h1 className="m-0 font-tc text-[34px] font-bold max-md:basis-full max-md:text-[26px]">先告訴系統參考文獻在哪</h1><span className="text-lg font-semibold max-md:min-w-0 max-md:truncate max-md:text-base">{job.filename}</span><Tag>{job.mode}</Tag>
+            <button type="button" className={`${btn.outline} ml-auto max-md:basis-full max-md:ml-0`} onClick={() => setHelp(true)}>教學：這一頁要做什麼</button>
           </div>
           <p className="m-0 max-w-[760px] font-tc text-[15px] leading-relaxed text-dim">無法確認參考文獻區塊：{REASON[ask.reason]}。</p>
         </div>
@@ -79,15 +79,15 @@ export default function Block({ me, id }: { me: Me; id: string }) {
             </div>
             <ol className="m-0 flex list-none flex-col border-t border-line p-0">
               {cands.map((c, k) => (
-                <li key={c.index} className={`flex items-start gap-4 border-b border-line px-2 py-3 ${sel.has(c.index) ? 'bg-white' : 'bg-mist text-dim'}`}>
+                <li key={c.index} className={`flex items-start gap-4 border-b border-line px-2 py-3 max-md:flex-wrap max-md:gap-x-3 max-md:px-0 ${sel.has(c.index) ? 'bg-white' : 'bg-mist text-dim'}`}>
                   <input type="checkbox" className="mt-1 size-4 accent-ink" checked={sel.has(c.index)} onChange={() => toggle(c.index)} aria-label={`第 ${k + 1} 段`} />
-                  <span className="w-10 shrink-0 font-mono text-sm text-graphite">{sel.has(c.index) ? `[${[...sel].filter(i => i < c.index).length + 1}]` : '—'}</span>
+                  <span className="w-10 shrink-0 font-mono text-sm text-graphite max-md:w-8">{sel.has(c.index) ? `[${[...sel].filter(i => i < c.index).length + 1}]` : '—'}</span>
                   <span className="min-w-0 flex-1 font-serif text-[14px] leading-snug">{c.text}</span>
-                  {c.numbered && <span className="shrink-0 border border-edge px-1.5 py-0.5 font-mono text-[11px] text-dim">{c.numbered.includes('%') ? 'Word 自動編號' : `開頭 ${c.numbered}`}</span>}
+                  {c.numbered && <span className="shrink-0 border border-edge px-1.5 py-0.5 font-mono text-[11px] text-dim max-md:order-last max-md:ml-[72px] max-md:shrink max-md:basis-full max-md:border-0 max-md:p-0 max-md:before:content-['→_']">{c.numbered.includes('%') ? 'Word 自動編號' : `開頭 ${c.numbered}`}</span>}
                 </li>
               ))}
             </ol>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 max-md:flex-col max-md:items-stretch">
               <button type="button" className={btn.primary} disabled={busy !== null || sel.size === 0} onClick={() => send({ paras: [...sel].sort((a, b) => a - b) })}>
                 對，這 {sel.size} 段是清單，幫我加上 [n] 編號
               </button>
@@ -103,8 +103,8 @@ export default function Block({ me, id }: { me: Me; id: string }) {
             <p className="m-0 max-w-[760px] font-tc text-[15px] leading-relaxed text-dim">
               一行一筆，行首不用編號。連換行都沒有的話，按「讓 LLM 初排」切行（只切行，內容不改）。
             </p>
-            <textarea className="min-h-[360px] w-full border border-edge bg-white p-3 font-serif text-[14px] leading-relaxed" value={text} onChange={e => setManual(e.target.value)} spellCheck={false} placeholder="一行一筆，貼進來" />
-            <div className="flex flex-wrap items-center gap-3">
+            <textarea className="min-h-[360px] w-full border border-edge bg-white p-3 font-serif text-[14px] leading-relaxed max-md:text-base" value={text} onChange={e => setManual(e.target.value)} spellCheck={false} placeholder="一行一筆，貼進來" />
+            <div className="flex flex-wrap items-center gap-3 max-md:flex-col max-md:items-stretch">
               <span className="font-tc text-sm text-dim">目前 {lines.length} 筆</span>
               <button type="button" className={btn.primary} disabled={busy !== null || lines.length === 0} onClick={() => send({ paras: ask.blob ? cands.map(c => c.index) : [...sel].sort((a, b) => a - b), entries: lines })}>
                 對，一行一筆，加上編號繼續
