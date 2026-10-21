@@ -36,7 +36,7 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
   return (
     <dialog ref={ref} onClose={onClose} onClick={e => { if (e.target === ref.current) onClose() }}
       className="share-dialog m-auto w-[min(720px,calc(100vw-32px))] border-2 border-ink bg-white p-0 text-ink backdrop:bg-[rgba(11,11,13,0.45)]">
-      <div className="flex flex-col gap-5 p-7">
+      <div className="flex flex-col gap-5 p-7 max-md:gap-4 max-md:p-4">
         <div className="flex items-center gap-3"><Mark shape="square" color="#2F4BF0" size={12} /><h2 className="m-0 font-tc text-xl font-bold">分享這篇的修訂報告</h2>
           <button type="button" aria-label="關閉" onClick={onClose} className="btn ml-auto flex size-9 cursor-pointer items-center justify-center border border-edge bg-white text-lg text-dim">×</button></div>
         {err && <p className="m-0 font-mono text-sm text-fail">{err}</p>}
@@ -63,9 +63,9 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
             <p className="m-0 font-tc text-xs text-graphite">打開連結的人會看到跟你一模一樣的這一頁，但不能下載修訂後的 .docx。圖片保留 30 天，之後需要時會重新產生。</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {'share' in navigator && <button type="button" onClick={native} className={btn.outline}>分享到…</button>}
+            {'share' in navigator && <button type="button" onClick={native} className={`${btn.outline} max-md:w-full`}>分享到…</button>}
             {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" aria-label={`分享到 ${label}`} title={label} onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex size-11 items-center justify-center no-underline after:absolute after:inset-0 after:bg-white after:opacity-0 after:content-[''] hover:after:opacity-15 relative"><Brand k={k} /></a>)}
-            <a href={sq ? share.cardSquareUrl(sh.token) : share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}${sq ? '-square' : ''}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto`}>下載圖片 ↓</a>
+            <a href={sq ? share.cardSquareUrl(sh.token) : share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}${sq ? '-square' : ''}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto max-md:ml-0 max-md:w-full`}>下載圖片 ↓</a>
           </div>
         </>}
       </div>
@@ -81,12 +81,12 @@ export function SharePage({ token }: { token: string }) {
   return (
     <div className="min-h-screen bg-white text-ink">
       <header className="border-b border-line">
-        <div className="mx-auto flex min-h-16 max-w-[1360px] flex-wrap items-center gap-x-7 px-6">
+        <div className="mx-auto flex min-h-16 max-w-[1360px] flex-wrap items-center gap-x-7 px-6 max-md:min-h-14 max-md:px-4">
           <span className="flex items-center gap-3"><Logo /><span className="text-base font-semibold">ESA Lab</span><span className="bg-mist px-1.5 py-0.5 font-mono text-[11px] text-dim">SHARED</span></span>
           <a href="#/" className={`${btn.outline} ml-auto min-h-9 px-3.5 text-[13px]`}>我也要修參考文獻 →</a>
         </div>
       </header>
-      <main className="mx-auto max-w-[1360px] px-6 pt-8 pb-20">
+      <main className="mx-auto max-w-[1360px] px-6 pt-8 pb-20 max-md:px-4 max-md:pt-5 max-md:pb-16">
         {err ? <p className="font-tc text-fail">{err === 'Not Found' ? '這個分享連結不存在，或原本的工作已被刪除。' : err}</p>
           : !sh ? <p className="font-tc text-dim">載入中…</p>
           : <div className="flex flex-col gap-10">

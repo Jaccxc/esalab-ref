@@ -14,7 +14,7 @@ export default function Settings({ me, onSaved }: { me: Me; onSaved: () => void 
       <form onSubmit={save} className="flex max-w-[520px] flex-col gap-6">
         <div className="flex flex-col gap-2">
           <div className="font-mono text-xs tracking-[0.12em] text-graphite">SETTINGS</div>
-          <h1 className="m-0 font-tc text-4xl font-bold">設定</h1>
+          <h1 className="m-0 font-tc text-4xl font-bold max-md:text-[26px]">設定</h1>
         </div>
         <label className="flex flex-col gap-2 font-tc text-[13px] font-medium">預設修訂作者 <span className="font-normal text-graphite">（建立新工作時自動填入；留空則用 ESALab-RefBot）</span>
           <input data-tour="author" value={author} onChange={e => setAuthor(e.target.value)} maxLength={64} placeholder="ESALab-RefBot" className={`${input} h-12`} />

@@ -56,13 +56,25 @@ export default function Workbench({ me }: { me: Me }) {
   const shown = list.filter(j => filter === 'all' || j.status === filter)
   const count = (f: Status | 'all') => (f === 'all' ? list : list.filter(j => j.status === f)).length
 
+  const banner = waiting.length > 0 && (
+    <a href={`#/jobs/${waiting[0].id}/${waiting[0].ask ? 'block' : 'preview'}`} className="flex flex-wrap items-center gap-x-5 gap-y-3 bg-wait px-5 py-4.5 text-white no-underline max-md:flex-col max-md:items-stretch max-md:p-4">
+      <span className="max-md:hidden"><Mark shape="circle" color="#FFFFFF" size={14} /></span>
+      <span className="flex flex-[1_1_280px] flex-col gap-0.5 font-tc max-md:flex-none">
+        <span className="flex items-center gap-2.5 text-base font-bold"><span className="md:hidden"><Mark shape="circle" color="#FFFFFF" size={12} /></span>{waiting.length} 份工作在等你確認</span>
+        <span className="text-[13px] text-[#FFE4C7]">{waiting[0].filename} {waiting[0].ask ? '讀不出參考文獻清單，需要你指一下在哪' : '已查完書目，需要你看一下才會繼續'}。</span>
+      </span>
+      <span className="btn bg-white px-4 py-2.5 font-tc text-sm font-bold text-[#93370D] max-md:flex max-md:min-h-11 max-md:items-center max-md:px-3.5">{waiting[0].ask ? '去指出清單' : '前往預覽確認'} →</span>
+    </a>
+  )
+
   return (
     <Shell me={me} active="work">
-      <div className="flex flex-wrap items-start gap-12">
-        <section className="flex max-w-[460px] flex-[1_1_380px] flex-col gap-6">
+      <div className="flex flex-wrap items-start gap-12 max-md:gap-7">
+        {banner && <div className="basis-full md:hidden">{banner}</div>}
+        <section className="flex max-w-[460px] flex-[1_1_380px] flex-col gap-6 max-md:-mx-4 max-md:max-w-none max-md:border-b-8 max-md:border-mist max-md:px-4 max-md:pb-8">
           <div className="flex flex-col gap-1.5"><Eyebrow>01 / NEW JOB</Eyebrow><H1>建立新工作</H1></div>
           <form onSubmit={submit} className="flex flex-col gap-6">
-            <label data-tour="upload" className="flex cursor-pointer flex-col items-start gap-4 border border-dashed border-faint bg-[#FAFAFA] p-6"
+            <label data-tour="upload" className="flex cursor-pointer flex-col items-start gap-4 border border-dashed border-faint bg-[#FAFAFA] p-6 max-md:p-4"
               onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) setFile(f) }}>
               <span className="flex w-full items-center gap-3.5">
                 <span className="flex h-12 w-10 flex-none items-end justify-center bg-ink pb-1.5 font-mono text-[9px] text-white" aria-hidden="true">DOCX</span>
@@ -71,7 +83,7 @@ export default function Workbench({ me }: { me: Me }) {
                   <span className="font-mono text-xs text-graphite">{file ? `${(file.size / 1048576).toFixed(1)} MB · 點此或拖放以更換` : '點此或拖放檔案'}</span>
                 </span>
               </span>
-              <input type="file" accept=".docx" className="text-[13px]" onChange={e => setFile(e.target.files?.[0] || null)} />
+              <input type="file" accept=".docx" className="text-[13px] max-md:sr-only" onChange={e => setFile(e.target.files?.[0] || null)} />
             </label>
 
             <fieldset data-tour="mode" className="m-0 flex flex-col gap-2.5 border-0 p-0">
@@ -100,7 +112,7 @@ export default function Workbench({ me }: { me: Me }) {
                     <span className="flex w-12 flex-none items-center justify-center bg-mist font-mono text-xs font-medium text-signal" aria-hidden="true">[+{i + 1}]</span>
                     <input ref={el => { inputs.current[i] = el }} value={l} aria-label={`第 ${i + 1} 筆書目`} placeholder={i === 0 ? '標題、DOI 或 URL，Enter 換下一筆' : ''}
                       onChange={e => setLine(i, e.target.value)} onKeyDown={e => onKey(i, e)} onPaste={e => onPaste(i, e)} onBlur={() => onBlur(i)}
-                      className="min-w-0 flex-1 border-0 bg-white px-3.5 py-2.5 font-mono text-[13px] text-ink" />
+                      className="min-w-0 flex-1 border-0 bg-white px-3.5 py-2.5 font-mono text-[13px] text-ink max-md:text-base" />
                   </div>
                 ))}
               </div>
@@ -133,35 +145,26 @@ export default function Workbench({ me }: { me: Me }) {
         <section data-tour="history" className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
           <div className="flex flex-wrap items-end gap-4">
             <div className="flex flex-col gap-1.5"><Eyebrow>02 / HISTORY</Eyebrow><H1>我的紀錄</H1></div>
-            <div className="ml-auto flex flex-wrap gap-1.5 font-tc text-[13px]">
+            <div className="ml-auto flex flex-wrap gap-1.5 font-tc text-[13px] max-md:-mr-4 max-md:-ml-4 max-md:basis-full max-md:flex-nowrap max-md:overflow-x-auto max-md:px-4">
               {FILTERS.map(([f, name]) => (
-                <button key={f} type="button" onClick={() => setFilter(f)} className={`min-h-9 cursor-pointer px-3.5 ${filter === f ? 'border-0 bg-ink text-white' : f === 'waiting' && count(f) ? 'border border-wait bg-[#FFF4E5] font-bold text-[#93370D]' : 'border border-line bg-white'}`}>
+                <button key={f} type="button" onClick={() => setFilter(f)} className={`min-h-9 cursor-pointer px-3.5 max-md:min-h-10 max-md:flex-none ${filter === f ? 'border-0 bg-ink text-white' : f === 'waiting' && count(f) ? 'border border-wait bg-[#FFF4E5] font-bold text-[#93370D]' : 'border border-line bg-white'}`}>
                   {name} {count(f)}
                 </button>
               ))}
             </div>
           </div>
 
-          {waiting.length > 0 && (
-            <a href={`#/jobs/${waiting[0].id}/${waiting[0].ask ? 'block' : 'preview'}`} className="flex flex-wrap items-center gap-x-5 gap-y-3 bg-wait px-5 py-4.5 text-white no-underline">
-              <Mark shape="circle" color="#FFFFFF" size={14} />
-              <span className="flex flex-[1_1_280px] flex-col gap-0.5 font-tc">
-                <span className="text-base font-bold">{waiting.length} 份工作在等你確認</span>
-                <span className="text-[13px] text-[#FFE4C7]">{waiting[0].filename} {waiting[0].ask ? '讀不出參考文獻清單，需要你指一下在哪' : '已查完書目，需要你看一下才會繼續'}。</span>
-              </span>
-              <span className="btn bg-white px-4 py-2.5 font-tc text-sm font-bold text-[#93370D]">{waiting[0].ask ? '去指出清單' : '前往預覽確認'} →</span>
-            </a>
-          )}
+          {banner && <div className="max-md:hidden">{banner}</div>}
 
-          <div className="flex flex-col border-t border-ink">
+          <div className="flex flex-col border-t border-ink max-md:-mx-4">
             {shown.map(j => {
               const s = STATUS[j.status]
               const label = j.status === 'running' ? `${stageName(j.stage)}` : s.label
               return (
-                <article key={j.id} className={`flex flex-wrap items-center gap-x-6 gap-y-4 border-b border-line px-3 py-5 ${j.status === 'waiting' ? 'bg-[#FFF4E5]' : ''}`}>
-                  <div className="flex min-w-0 flex-[1_1_260px] flex-col gap-1.5">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <a href={`#/jobs/${j.id}${j.status === 'waiting' ? (j.ask ? '/block' : '/preview') : ''}`} className="text-base font-semibold text-ink no-underline">{j.filename}</a>
+                <article key={j.id} className={`flex flex-wrap items-center gap-x-6 gap-y-4 border-b border-line px-3 py-5 max-md:flex-col max-md:items-stretch max-md:gap-3 max-md:px-4 max-md:py-4.5 ${j.status === 'waiting' ? 'bg-[#FFF4E5]' : ''}`}>
+                  <div className="flex min-w-0 flex-[1_1_260px] flex-col gap-1.5 max-md:flex-none">
+                    <div className="flex flex-wrap items-center gap-2 max-md:flex-nowrap">
+                      <a href={`#/jobs/${j.id}${j.status === 'waiting' ? (j.ask ? '/block' : '/preview') : ''}`} className="text-base font-semibold text-ink no-underline max-md:min-w-0 max-md:truncate">{j.filename}</a>
                       <Tag>{j.mode}</Tag>
                     </div>
                     <div className="font-mono text-xs text-graphite">{fmtTime(j.started)} · {j.status === 'done' || j.status === 'failed' ? '耗時' : '已用'} {fmtDur(j.elapsed)} · {j.entries} 條{j.changed != null ? ` · ${j.changed} 筆修訂` : ''}</div>
@@ -169,7 +172,7 @@ export default function Workbench({ me }: { me: Me }) {
                     {j.status === 'done' && j.expired && <div className="font-tc text-[13px] text-graphite">檔案已超過 30 天，已清除</div>}
                     {j.status === 'waiting' && <div className="font-tc text-[13px] text-[#93370D]">{j.ask ? '讀取條目：找不到 [n] 清單，等你指出在哪' : '預覽確認：查到的論文等你處理'}</div>}
                   </div>
-                  <div className="flex w-[240px] flex-none flex-col gap-2">
+                  <div className="flex w-[240px] flex-none flex-col gap-2 max-md:w-auto">
                     <div className="flex items-center justify-between gap-2">
                       <span className={`flex items-center gap-2 font-tc text-[13px] ${j.status === 'waiting' ? 'bg-wait px-2.5 py-1 font-bold text-white' : 'font-medium'}`} style={j.status !== 'waiting' ? { color: s.color } : undefined}>
                         <Mark shape={s.shape} color={j.status === 'waiting' ? '#FFFFFF' : s.color} />{label}
@@ -178,11 +181,11 @@ export default function Workbench({ me }: { me: Me }) {
                     </div>
                     <div className="h-1 bg-line"><div className="h-1" style={{ width: `${j.percent}%`, background: s.color }} /></div>
                   </div>
-                  <div className="flex w-[220px] flex-none justify-end gap-1.5">
-                    {j.status === 'done' && !j.expired && <a href={jobs.resultUrl(j.id)} className={`${btn.primary} min-h-10 px-3.5 text-[13px]`}>下載</a>}
-                    {j.status === 'waiting' && <a href={`#/jobs/${j.id}/${j.ask ? 'block' : 'preview'}`} className="btn flex min-h-10 items-center bg-wait px-3.5 font-tc text-[13px] font-bold text-white no-underline">去確認</a>}
-                    <a href={`#/jobs/${j.id}`} className={`${btn.ghost} min-h-10 px-3.5 text-[13px]`}>詳情</a>
-                    <button type="button" aria-label="刪除" onClick={() => setAsk(j)} className="min-h-10 w-10 cursor-pointer border border-edge bg-white text-base text-dim disabled:cursor-default disabled:text-edge">×</button>
+                  <div className="flex w-[220px] flex-none justify-end gap-1.5 max-md:w-auto">
+                    {j.status === 'done' && !j.expired && <a href={jobs.resultUrl(j.id)} className={`${btn.primary} min-h-10 px-3.5 text-[13px] max-md:min-h-11 max-md:flex-1 max-md:justify-center max-md:text-sm`}>下載</a>}
+                    {j.status === 'waiting' && <a href={`#/jobs/${j.id}/${j.ask ? 'block' : 'preview'}`} className="btn flex min-h-10 items-center bg-wait px-3.5 font-tc text-[13px] font-bold text-white no-underline max-md:min-h-11 max-md:flex-1 max-md:justify-center max-md:text-sm">去確認</a>}
+                    <a href={`#/jobs/${j.id}`} className={`${btn.ghost} min-h-10 px-3.5 text-[13px] max-md:min-h-11 max-md:flex-1 max-md:justify-center max-md:text-sm`}>詳情</a>
+                    <button type="button" aria-label="刪除" onClick={() => setAsk(j)} className="min-h-10 w-10 max-md:min-h-11 max-md:w-11 cursor-pointer border border-edge bg-white text-base text-dim disabled:cursor-default disabled:text-edge">×</button>
                   </div>
                 </article>
               )
