@@ -118,7 +118,7 @@ function TourDialog({ title, label, wide, danger, nav, children }: { title: stri
   useEffect(() => { const d = ref.current; if (d && !d.open) d.showModal(); return () => { if (d?.open) d.close() } }, [])
   return (
     <dialog ref={ref} onCancel={e => e.preventDefault()} className={`m-auto border-2 bg-white p-0 text-ink backdrop:bg-[rgba(11,11,13,0.62)] ${danger ? 'border-fail' : 'border-ink'} ${wide ? 'w-[min(820px,calc(100vw-32px))]' : 'w-[min(540px,calc(100vw-32px))]'}`}>
-      <div className="flex flex-col gap-4 p-7">
+      <div className="flex flex-col gap-4 p-7 max-md:p-4">
         <span className="font-mono text-xs tracking-[0.12em] text-graphite">新手教學 · {label}</span>
         <div className="flex items-center gap-3"><Mark shape={danger ? 'tri' : 'square'} color={danger ? '#C8281E' : '#0B0B0D'} size={12} /><h2 className="m-0 font-tc text-xl font-bold">{title}</h2></div>
         {typeof children === 'string' ? <p className="m-0 font-tc text-[15px] leading-relaxed text-dim">{children}</p> : children}

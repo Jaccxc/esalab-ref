@@ -20,8 +20,8 @@ const TOOLS: [string, string][] = [
 
 const Snippet = ({ title, text, note }: { title: string; text: string; note?: string }) => (
   <div className="flex flex-col gap-2">
-    <div className="flex items-center gap-3"><span className="font-tc text-sm font-bold">{title}</span>{note && <span className="font-tc text-xs text-dim">{note}</span>}
-      <button type="button" className={`${btn.ghost} ml-auto min-h-8 px-3 text-xs`} onClick={e => copyRef(text, e)}>複製</button></div>
+    <div className="flex items-center gap-3 max-md:flex-wrap"><span className="font-tc text-sm font-bold">{title}</span>{note && <span className="font-tc text-xs text-dim max-md:order-last max-md:basis-full">{note}</span>}
+      <button type="button" className={`${btn.ghost} ml-auto min-h-8 shrink-0 px-3 text-xs`} onClick={e => copyRef(text, e)}>複製</button></div>
     <pre className="m-0 overflow-x-auto border border-line bg-mist p-3.5 font-mono text-[12.5px] leading-relaxed whitespace-pre-wrap break-all">{text}</pre>
   </div>
 )
@@ -37,7 +37,7 @@ export default function Mcp({ me }: { me: Me }) {
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <div className="font-mono text-xs tracking-[0.12em] text-graphite">MCP</div>
-          <h1 className="m-0 font-tc text-4xl font-bold">用 AI 客戶端接入</h1>
+          <h1 className="m-0 font-tc text-4xl font-bold max-md:text-[26px]">用 AI 客戶端接入</h1>
           <p className="m-0 font-tc text-[15px] leading-relaxed">Claude Code、Cursor、Claude Desktop 這類支援 MCP 的客戶端可以直接操作這套系統：上傳論文用一行 curl，之後查進度、確認書目、繼續、下載都是工具呼叫。每個帳號用自己的 token，紀錄與網頁版共用。</p>
         </div>
 
@@ -84,8 +84,8 @@ http_headers = { Authorization = "Bearer ${T}" }`} />
 
         <section className="flex flex-col gap-4">
           <h2 className="m-0 border-b border-ink pb-2 font-tc text-[22px] font-bold">4 · 工具一覽</h2>
-          <div className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2.5 border-t border-line pt-3">
-            {TOOLS.map(([n, d]) => <div key={n} className="contents"><code className="font-mono text-[13px]">{n}</code><span className="font-tc text-sm leading-relaxed">{d}</span></div>)}
+          <div className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2.5 border-t border-line pt-3 max-md:grid-cols-1 max-md:gap-y-1">
+            {TOOLS.map(([n, d]) => <div key={n} className="contents"><code className="font-mono text-[13px]">{n}</code><span className="font-tc text-sm leading-relaxed max-md:mb-2.5">{d}</span></div>)}
           </div>
           <p className="m-0 font-tc text-[15px] leading-relaxed text-dim">典型流程：how_to_upload → 執行 curl 取得 id → get_job 到 waiting（ask=true 就先 reference_block → set_reference_block）→ review_job → 逐筆 research / choose / skip → continue_job → get_job 到 done → result_link 下載。工作要跑十到三十分鐘，客戶端用 get_job 每隔一段時間查一次即可。</p>
         </section>

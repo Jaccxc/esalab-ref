@@ -23,8 +23,8 @@ export default function Guide({ me }: { me: Me }) {
       <div className="flex flex-col gap-7">
         <div className="flex flex-col gap-2">
           <div className="font-mono text-xs tracking-[0.12em] text-graphite">GUIDE</div>
-          <div className="flex flex-wrap items-center gap-4"><h1 className="m-0 font-tc text-4xl font-bold">系統怎麼運作</h1>
-            <button type="button" className={`${btn.outline} ml-auto`} onClick={restartTour}>重看新手教學</button></div>
+          <div className="flex flex-wrap items-center gap-4"><h1 className="m-0 font-tc text-4xl font-bold max-md:text-[26px]">系統怎麼運作</h1>
+            <button type="button" className={`${btn.outline} ml-auto max-md:basis-full max-md:ml-0`} onClick={restartTour}>重看新手教學</button></div>
           <P>上傳論文 .docx，系統讀出參考文獻、到資料庫查每一筆、停下來讓你確認、核對引用順序、用 LLM 套實驗室 IEEE 格式並審查，最後以 Word 修訂模式寫回。全部可以在 Word 裡逐筆接受或拒絕。</P>
         </div>
 
@@ -60,7 +60,7 @@ export default function Guide({ me }: { me: Me }) {
         <H>引用順序怎麼算</H>
         <P>IEEE 規則：編號依本文第一次出現的順序，清單跟著排。系統只信本文裡的 <C>[n]</C>，所以改本文的數字就是改引用對象，順序與清單會自動修正。能讀的寫法：<C>[3]</C>、<C>[3, 5]</C>、<C>[3]–[5]</C>、<C>[3-5]</C>、<C>[+1]</C>、<C>[2, +1]</C>。寫回時三個以上連號會壓成 <C>[3]–[5]</C>。</P>
         <P><b>唯一的事實是：你上傳當下清單裡已經有的那些論文，以及本文每個數字當時指到的那一篇。系統只會重排編號，數字會變，但每個引用對應到哪一篇論文絕對不變。所以要換引用對象，就改本文的數字指到你要的那篇；清單順序由系統負責。</b></P>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(440px,1fr))] gap-4">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(440px,1fr))] gap-4 max-md:grid-cols-1">
           <Ex demo={SCENARIOS.swap} title="單純換一篇：[2] 改成 [5]，其他地方不動" before="…如 [2] 所述… → 改成 …如 [5] 所述…；舊 [2] 在後面還有引用" after="條目 5 成為新的 [2]，舊 2 依後面被引用的位置排；這個例子剛好兩者互換，沒有警告" note="若舊 [2] 在本文別處都沒再引用，它不會被刪，而是移到舊條目最後，並出現「內文沒引用到」警告。" />
           <Ex demo={SCENARIOS.exchange} title="兩處對調：[2] 改成 [5]、[5] 改成 [2]" before="…如 [2] 所述…能耗見 [5]… → …如 [5] 所述…能耗見 [2]…" after="清單裡條目 2 與 5 互換位置，其他編號不變" note="本文的數字最後會依出現順序再重寫一次，所以看起來又是 [2]、[5]，但指向的論文已經對調。" />
           <Ex warn demo={SCENARIOS.trap} title="同一篇引用了兩處，只改了一處" before="…如 [3] 所述…方法見 [3]… → 只把前面改成 …如 [5] 所述…，後面忘了改" after="舊 5 變成 [3]、舊 3 變成 [5]；後面那處顯示成 [5]，看起來像換成功了，其實仍指舊的第 3 篇" note="同一篇在本文引用了幾處就要改幾處；改之前先用 Word 搜尋「[3]」把每一處找出來。系統只認數字指到的論文，不猜你的意圖。" />

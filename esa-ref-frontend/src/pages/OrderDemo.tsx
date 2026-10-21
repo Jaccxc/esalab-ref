@@ -57,13 +57,13 @@ export function OrderDemo({ scenario }: { scenario: Scenario }) {
       </div>
       <div className="flex min-h-0 flex-1 flex-col border border-edge bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12)]">
         <div className="flex items-center gap-2 bg-[#185ABD] px-2 py-1 text-[11px] text-white"><span className="flex size-4 items-center justify-center bg-white font-serif text-[11px] font-bold text-[#185ABD]">W</span>論文.docx · Word<span className="ml-auto font-mono text-[10px] text-[#C7D7F5]">{i >= 2 ? '系統寫回的修訂' : '你的原稿'}</span></div>
-      <div className={`grid min-h-0 flex-1 gap-3 p-2.5 ${tall ? 'grid-cols-[minmax(0,3fr)_minmax(0,7fr)]' : 'grid-cols-[minmax(0,5fr)_minmax(0,6fr)]'}`}>
+      <div className={`grid min-h-0 flex-1 gap-3 p-2.5 max-md:grid-cols-1 ${tall ? 'grid-cols-[minmax(0,3fr)_minmax(0,7fr)]' : 'grid-cols-[minmax(0,5fr)_minmax(0,6fr)]'}`}>
         <div className="flex flex-col gap-2">
           <span className="text-[11px] tracking-widest text-faint">本文（第 3 章）</span>
           <p className="m-0 text-[13px] leading-[1.9]"><Toks toks={f.body} /></p>
           {f.issue && <span className="text-xs font-bold text-fail">{f.issue}</span>}
         </div>
-        <div className="flex min-w-0 flex-col gap-2 border-l border-line pl-3">
+        <div className="flex min-w-0 flex-col gap-2 border-l border-line pl-3 max-md:border-t max-md:border-l-0 max-md:pt-2 max-md:pl-0">
           <span className="text-[11px] tracking-widest text-faint">參考文獻（文末清單）</span>
           <div ref={list} className="relative" style={{ height: rows.length * h, transition: 'height .7s' }}>
             {rows.map(r => (
