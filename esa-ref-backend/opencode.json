@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/glm-5.3-flash-free",
+  "share": "disabled",
+  "autoupdate": false,
+  "permission": { "edit": "deny", "bash": "deny" },
+  "agent": {
+    "refs": {
+      "description": "Formats and checks bibliography entries for the ESA Lab style; read-only, may fetch web pages to confirm journal abbreviations.",
+      "mode": "primary",
+      "temperature": 0,
+      "steps": 6,
+      "permission": { "edit": "deny", "bash": "deny", "webfetch": "allow" },
+      "prompt": "You format bibliography references. The style rules arrive in the system message of each request. Answer only with the requested structured output."
+    }
+  }
+}

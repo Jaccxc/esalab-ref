@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./esa-ref-backend
+    env_file: ./esa-ref-backend/.env
+    environment:
+      OPENCODE_URL: http://127.0.0.1:4096   # opencode serve runs inside this container
+    volumes:
+      - esalab-data:/app/data               # the SQLite file: users, jobs (+docx blobs), refs, settings
+    expose: ["8000"]
+    restart: unless-stopped
+
+  frontend:
+    build: ./esa-ref-frontend
+    ports:
+      - "${PORT:-8080}:80"
+    depends_on: [backend]
+    restart: unless-stopped
+
+volumes:
+  esalab-data:
