@@ -3,6 +3,7 @@ import io
 import time
 
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from esalab import app as appmod, auth, db, pipeline
 from tests.make_fixture import build
@@ -226,7 +227,9 @@ def test_share(monkeypatch, tmp_path):
     assert "quips" not in sh
     assert c.get("/api/share/nope").status_code == 404
     png = c.get(f"/api/share/{tok}/card.png")
-    assert png.status_code == 200 and png.content[:8] == b"\x89PNG\r\n\x1a\n"
+    assert png.status_code == 200 and png.content[:8] == b"\x89PNG\r\n\x1a\n" and Image.open(io.BytesIO(png.content)).size == (1200, 630)
+    sq = c.get(f"/api/share/{tok}/card-square.png")
+    assert sq.status_code == 200 and Image.open(io.BytesIO(sq.content)).size == (1080, 1080)
     html = c.get(f"/s/{tok}", headers={"host": "x.test", "x-forwarded-proto": "https"}).text
     assert f'og:image" content="https://x.test/api/share/{tok}/card.png"' in html and f"/#/s/{tok}" in html
     assert c.post(f"/api/share/{tok}/hit", json={"via": "copy"}).status_code == 204
@@ -240,7 +243,7 @@ def test_share(monkeypatch, tmp_path):
         con.execute("UPDATE shares SET png_at=? WHERE token=?", (time.time() - 31 * 86400, tok))
     appmod.JOBS.purge()
     with db.connect() as con:
-        assert con.execute("SELECT png FROM shares WHERE token=?", (tok,)).fetchone() == (None,)
+        assert con.execute("SELECT png, png_sq FROM shares WHERE token=?", (tok,)).fetchone() == (None, None)
     assert c.get(f"/api/share/{tok}/card.png").status_code == 200 and c.get(f"/api/share/{tok}").json()["job"]["expired"]
     assert c.delete(f"/api/jobs/{jid}", headers=ann).status_code in (200, 204)
     assert c.get(f"/api/share/{tok}").status_code == 404
