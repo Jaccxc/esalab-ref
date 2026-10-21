@@ -13,6 +13,7 @@ def _client(monkeypatch, tmp_path):
     monkeypatch.setattr(db, "DB", tmp_path / "esalab.db")
     monkeypatch.setenv("JWT_SECRET", "test-secret-of-at-least-32-bytes-long")
     monkeypatch.setenv("OPENCODE_URL", "http://127.0.0.1:1")  # unreachable: jobs fail fast instead of calling an LLM
+    monkeypatch.setenv("ADMIN_USER", "admin")  # a developer .env may name another admin
     monkeypatch.setenv("ADMIN_PASSWORD", "test-admin-pw")
     return TestClient(appmod.app)
 
