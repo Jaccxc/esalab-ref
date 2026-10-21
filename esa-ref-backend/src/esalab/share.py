@@ -202,7 +202,8 @@ def card(share: dict, square: bool = False) -> bytes:
     top = PT + 15 + 26
     twidth = cw if square else cw - 28 - bars_w
     lines = _wrap_runs(d, s.get("filename") or "", X(tsize), 700, X(twidth), 2)
-    y = top
+    # wide: the row is align-items flex-end, so a one-line title block drops to the bars column's bottom (56 + 6 + 12)
+    y = top if square else top + max(0, 74 - (len(lines) * tlh + 10 + 17))
     for runs in lines:
         _draw_runs(d, X(PX), _base(runs[0][1] if runs else fn, X(y), X(tlh)), runs, WHITE)
         y += tlh
