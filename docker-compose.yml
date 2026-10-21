@@ -4,6 +4,7 @@ services:
     env_file: ./esa-ref-backend/.env
     environment:
       OPENCODE_URL: http://127.0.0.1:4096   # opencode serve runs inside this container
+      TZ: Asia/Taipei                        # dates on cards and the admin's per-day stats are local, not UTC
     volumes:
       - esalab-data:/app/data               # the SQLite file: users, jobs (+docx blobs), refs, settings
     expose: ["8000"]
