@@ -7,4 +7,5 @@ __pycache__/
 data/
 node_modules/
 dist/
+esa-ref-backend/fonts/
 docs/ui-spec.md

@@ -436,7 +436,7 @@ class Jobs:
                 s["expired"] = True
                 con.execute("UPDATE jobs SET input=NULL, output=NULL, state=? WHERE id=?", (json.dumps(s, ensure_ascii=False), jid))
                 n += 1
-            con.execute("UPDATE shares SET png=NULL WHERE png_at < ?", (cutoff,))  # the card is redrawn on the next view
+            con.execute("UPDATE shares SET png=NULL, png_sq=NULL WHERE png_at < ?", (cutoff,))  # the cards are redrawn on the next view
         if n:
             db.event("system", "cron", "purge", str(n))
         return n
