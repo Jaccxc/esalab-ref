@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS single_tasks (id TEXT PRIMARY KEY, user TEXT, created
 CREATE TABLE IF NOT EXISTS prefs (username TEXT PRIMARY KEY, author TEXT);
 CREATE TABLE IF NOT EXISTS refs (id TEXT PRIMARY KEY, user TEXT, created REAL, query TEXT, meta TEXT, reference TEXT, type TEXT, issues TEXT, check_ok INTEGER, problems TEXT);
 CREATE TABLE IF NOT EXISTS events (t REAL, user TEXT, via TEXT, kind TEXT, detail TEXT);
-CREATE TABLE IF NOT EXISTS shares (token TEXT PRIMARY KEY, job TEXT, user TEXT, created REAL, png BLOB, png_at REAL);
+CREATE TABLE IF NOT EXISTS shares (token TEXT PRIMARY KEY, job TEXT, user TEXT, created REAL, png BLOB, png_at REAL, png_sq BLOB);
 CREATE INDEX IF NOT EXISTS events_t ON events (t);
 """
 
@@ -28,6 +28,8 @@ def connect() -> sqlite3.Connection:
         con.execute("ALTER TABLE prefs ADD COLUMN tour TEXT")
     if "deleted" not in {r[1] for r in con.execute("PRAGMA table_info(jobs)")}:  # soft delete: the row keeps feeding the stats
         con.execute("ALTER TABLE jobs ADD COLUMN deleted REAL")
+    if "png_sq" not in {r[1] for r in con.execute("PRAGMA table_info(shares)")}:  # the square share card, cached like png
+        con.execute("ALTER TABLE shares ADD COLUMN png_sq BLOB")
     return con
 
 

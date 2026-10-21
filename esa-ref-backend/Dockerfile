@@ -5,7 +5,7 @@ RUN curl -fsSL https://opencode.ai/install | bash
 ENV PATH="/root/.opencode/bin:/root/.local/bin:${PATH}"
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 WORKDIR /app
-RUN mkdir fonts && curl -fsSL -o fonts/NotoSansCJKtc-Bold.otf https://github.com/notofonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Bold.otf
+RUN mkdir fonts && cd fonts  && curl -fsSL -o NotoSansCJKtc-Bold.otf https://github.com/notofonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Bold.otf  && curl -fsSL -o NotoSansCJKtc-Regular.otf https://github.com/notofonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Regular.otf  && curl -fsSL -o InterTight.ttf "https://github.com/google/fonts/raw/main/ofl/intertight/InterTight%5Bwght%5D.ttf"  && curl -fsSL -o JetBrainsMono.ttf "https://github.com/google/fonts/raw/main/ofl/jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf"
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY . .

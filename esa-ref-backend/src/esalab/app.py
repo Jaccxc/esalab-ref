@@ -407,6 +407,14 @@ def share_card(token: str):
     return Response(data, media_type="image/png", headers={"Cache-Control": "no-cache"})
 
 
+@app.get("/api/share/{token}/card-square.png")
+def share_card_square(token: str):
+    data = share.png(token, square=True)
+    if not data:
+        raise HTTPException(404)
+    return Response(data, media_type="image/png", headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/s/{token}", response_class=HTMLResponse)
 def share_page(token: str, request: Request):
     sh = share.load(token)

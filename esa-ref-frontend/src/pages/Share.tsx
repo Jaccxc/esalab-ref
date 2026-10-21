@@ -52,6 +52,7 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
             {'share' in navigator && <button type="button" onClick={native} className={btn.outline}>分享到…</button>}
             {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex min-h-11 items-center gap-2.5 px-4 font-tc text-sm font-bold text-white no-underline"><Brand k={k} />{label}</a>)}
             <a href={share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto`}>下載圖片 ↓</a>
+            <a href={share.cardSquareUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}-square.png`} onClick={() => hit('image')} className={btn.ghost}>下載正方形圖 ↓</a>
           </div>
         </>}
       </div>

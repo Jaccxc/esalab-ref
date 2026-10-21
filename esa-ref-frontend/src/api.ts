@@ -67,6 +67,7 @@ export const share = {
   get: (token: string) => api<Share>(`/api/share/${token}`),
   hit: (token: string, via: string) => api(`/api/share/${token}/hit`, { method: 'POST', body: JSON.stringify({ via }) }),
   cardUrl: (token: string) => `/api/share/${token}/card.png`,
+  cardSquareUrl: (token: string) => `/api/share/${token}/card-square.png`,
 }
 
 export type Me = { username: string; admin: boolean; author: string; tour: string | null }
