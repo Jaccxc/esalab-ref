@@ -88,7 +88,7 @@ export const Doi = ({ doi }: { doi?: string | null }) => doi
   : <span className="font-mono text-xs text-graphite">無 DOI</span>
 
 export const Eyebrow = ({ children }: { children: ReactNode }) => <div className="font-mono text-xs tracking-[0.12em] text-graphite">{children}</div>
-export const H1 = ({ children }: { children: ReactNode }) => <h1 className="m-0 font-tc text-[28px] font-bold">{children}</h1>
+export const H1 = ({ children }: { children: ReactNode }) => <h1 className="m-0 font-tc text-[28px] font-bold max-md:text-2xl">{children}</h1>
 export const H2 = ({ children }: { children: ReactNode }) => <h2 className="m-0 font-tc text-[22px] font-bold">{children}</h2>
 export const Tag = ({ children }: { children: ReactNode }) => <span className="border border-edge px-2 py-0.5 font-mono text-xs">{children}</span>
 
@@ -109,7 +109,7 @@ export const copyRef = async (text: string, e: React.MouseEvent) => {
   el.onanimationend = () => el.remove()
   document.body.append(el)
 }
-export const input = 'h-11 border border-edge bg-white px-3.5 text-[15px] text-ink'
+export const input = 'h-11 border border-edge bg-white px-3.5 text-[15px] text-ink max-md:h-12 max-md:text-base'  // 16px on phones: iOS zooms into smaller inputs
 
 export const fmtTime = (t: number) => { const d = new Date(t * 1000); return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` }
 export const fmtDur = (s: number) => `${Math.floor(s / 60)} 分 ${Math.round(s % 60)} 秒`
