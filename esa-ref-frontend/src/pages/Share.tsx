@@ -25,6 +25,7 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
   const [sh, setSh] = useState<Share | null>(null)
   const [err, setErr] = useState('')
   const [copied, setCopied] = useState(false)
+  const [sq, setSq] = useState(false)  // preview + download format: wide (og:image) or square
   useEffect(() => { const d = ref.current; if (!d) return; if (open && !d.open) d.showModal(); else if (!open && d.open) d.close() }, [open])
   useEffect(() => { if (open && !sh) share.create(id).then(setSh).catch(e => setErr((e as Error).message)) }, [open, id, sh])
   const url = sh ? link(sh.token) : ''
@@ -40,7 +41,20 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
           <button type="button" aria-label="關閉" onClick={onClose} className="ml-auto flex size-9 cursor-pointer items-center justify-center border border-edge bg-white text-lg text-dim">×</button></div>
         {err && <p className="m-0 font-mono text-sm text-fail">{err}</p>}
         {sh && <>
-          <img src={share.cardUrl(sh.token)} alt="分享卡片" className="block aspect-[1200/630] w-full border border-line bg-ink" />
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[11px] tracking-[0.12em] text-graphite">{sq ? '1080 × 1080' : '1200 × 630'}</span>
+              <div role="group" aria-label="圖片版型" className="ml-auto flex border border-ink font-tc text-[13px]">
+                {[['橫式', false], ['正方形', true]].map(([label, v]) => (
+                  <button key={String(v)} type="button" aria-pressed={sq === v} onClick={() => setSq(v as boolean)}
+                    className={`min-h-9 cursor-pointer border-0 px-3.5 ${sq === v ? 'bg-ink text-white' : 'bg-white text-dim'}`}>{label as string}</button>
+                ))}
+              </div>
+            </div>
+            <div className="relative aspect-[1200/630] w-full border border-line bg-mist">
+              <img src={sq ? share.cardSquareUrl(sh.token) : share.cardUrl(sh.token)} alt="分享卡片" className={`absolute inset-0 m-auto h-full bg-ink ${sq ? 'w-auto' : 'w-full'}`} />
+            </div>
+          </div>
           <div className="flex flex-col gap-2">
             <div className="flex border border-ink">
               <input readOnly value={url} onFocus={e => e.currentTarget.select()} className="min-w-0 flex-1 border-0 bg-mist px-3 font-mono text-[13px] text-ink outline-none" />
@@ -50,9 +64,8 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
           </div>
           <div className="flex flex-wrap gap-2">
             {'share' in navigator && <button type="button" onClick={native} className={btn.outline}>分享到…</button>}
-            {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex min-h-11 items-center gap-2.5 px-4 font-tc text-sm font-bold text-white no-underline"><Brand k={k} />{label}</a>)}
-            <a href={share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto`}>下載圖片 ↓</a>
-            <a href={share.cardSquareUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}-square.png`} onClick={() => hit('image')} className={btn.ghost}>下載正方形圖 ↓</a>
+            {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" aria-label={`分享到 ${label}`} title={label} onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex size-11 items-center justify-center no-underline"><Brand k={k} /></a>)}
+            <a href={sq ? share.cardSquareUrl(sh.token) : share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}${sq ? '-square' : ''}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto`}>下載圖片 ↓</a>
           </div>
         </>}
       </div>
