@@ -35,10 +35,10 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
   const native = () => navigator.share({ title: blurb, url }).then(() => hit('native')).catch(() => {})
   return (
     <dialog ref={ref} onClose={onClose} onClick={e => { if (e.target === ref.current) onClose() }}
-      className="m-auto w-[min(720px,calc(100vw-32px))] border-2 border-ink bg-white p-0 text-ink backdrop:bg-[rgba(11,11,13,0.45)]">
+      className="share-dialog m-auto w-[min(720px,calc(100vw-32px))] border-2 border-ink bg-white p-0 text-ink backdrop:bg-[rgba(11,11,13,0.45)]">
       <div className="flex flex-col gap-5 p-7">
         <div className="flex items-center gap-3"><Mark shape="square" color="#2F4BF0" size={12} /><h2 className="m-0 font-tc text-xl font-bold">分享這篇的修訂報告</h2>
-          <button type="button" aria-label="關閉" onClick={onClose} className="ml-auto flex size-9 cursor-pointer items-center justify-center border border-edge bg-white text-lg text-dim">×</button></div>
+          <button type="button" aria-label="關閉" onClick={onClose} className="btn ml-auto flex size-9 cursor-pointer items-center justify-center border border-edge bg-white text-lg text-dim">×</button></div>
         {err && <p className="m-0 font-mono text-sm text-fail">{err}</p>}
         {sh && <>
           <div className="flex flex-col gap-2">
@@ -58,13 +58,13 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
           <div className="flex flex-col gap-2">
             <div className="flex border border-ink">
               <input readOnly value={url} onFocus={e => e.currentTarget.select()} className="min-w-0 flex-1 border-0 bg-mist px-3 font-mono text-[13px] text-ink outline-none" />
-              <button type="button" onClick={copy} className={`${btn.primary} min-w-28 hover:transform-none!`}>{copied ? '已複製 ✓' : '複製連結'}</button>
+              <button type="button" onClick={copy} className={`${btn.primary} min-w-28`}>{copied ? '已複製 ✓' : '複製連結'}</button>
             </div>
             <p className="m-0 font-tc text-xs text-graphite">打開連結的人會看到跟你一模一樣的這一頁，但不能下載修訂後的 .docx。圖片保留 30 天，之後需要時會重新產生。</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {'share' in navigator && <button type="button" onClick={native} className={btn.outline}>分享到…</button>}
-            {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" aria-label={`分享到 ${label}`} title={label} onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex size-11 items-center justify-center no-underline"><Brand k={k} /></a>)}
+            {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" aria-label={`分享到 ${label}`} title={label} onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex size-11 items-center justify-center no-underline after:absolute after:inset-0 after:bg-white after:opacity-0 after:content-[''] hover:after:opacity-15 relative"><Brand k={k} /></a>)}
             <a href={sq ? share.cardSquareUrl(sh.token) : share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}${sq ? '-square' : ''}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto`}>下載圖片 ↓</a>
           </div>
         </>}

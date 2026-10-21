@@ -57,6 +57,8 @@
 :is(.btn, button):not(:disabled):hover { transform: translateY(-1px) }
 :is(.btn, button):not(:disabled):active { transform: translateY(1px) scale(.98); transition-duration: .05s }
 :is(.btn, button):focus-visible { outline: 2px solid var(--color-signal); outline-offset: 2px }
+/* The share dialog keeps the card's flat language: hover tints, nothing lifts or sinks. */
+.share-dialog :is(.btn, button):not(:disabled):is(:hover, :active) { transform: none }
 .bg-ink:is(.btn, button):not(:disabled):hover { background: #27272A }
 .bg-signal:is(.btn, button):not(:disabled):hover { background: #2440D6 }
 .bg-wait:is(.btn, button):not(:disabled):hover { background: #9A3C06 }
