@@ -125,28 +125,36 @@ export function Shell({ me, active, wide = true, children }: { me: Me; active: '
   useEffect(() => { auth.health().then(setHealth).catch(() => setHealth({ opencode: false, model: '', throttled: [] })) }, [])
   const nav = (key: typeof active, href: string, label: string) => (
     <a href={href} aria-current={active === key ? 'page' : undefined}
-      className={`flex min-h-16 items-center px-3.5 no-underline ${active === key ? 'font-bold text-ink shadow-[inset_0_-2px_0_#0B0B0D]' : 'text-dim'}`}>{label}</a>
+      className={`flex min-h-16 items-center px-3.5 no-underline max-md:min-h-11 max-md:justify-center max-md:px-0 ${active === key ? 'font-bold text-ink shadow-[inset_0_-2px_0_#0B0B0D]' : 'text-dim'}`}>{label}</a>
   )
   return (
     <div className="min-h-screen bg-white">
       <header className="border-b border-line">
-        <div className="mx-auto flex min-h-16 max-w-[1360px] flex-wrap items-center gap-x-7 px-6">
-          <a href="#/" className="flex items-center gap-3 text-ink no-underline"><Logo /><span className="text-base font-semibold">ESA Lab</span>
+        {/* phone: a 56px row (logo, OpenCode pill, account button) with the nav wrapped under it as a 3-column grid */}
+        <div className="mx-auto flex min-h-16 max-w-[1360px] flex-wrap items-center gap-x-7 px-6 max-md:gap-x-2.5 max-md:pr-3 max-md:pl-4">
+          <a href="#/" className="flex items-center gap-3 text-ink no-underline max-md:h-14 max-md:gap-2.5"><Logo /><span className="text-base font-semibold">ESA Lab</span>
             {active === 'admin' && <span className="bg-ink px-1.5 py-0.5 font-mono text-[11px] text-white">ADMIN</span>}</a>
-          <nav aria-label="主選單" className="flex font-tc text-sm">
+          <nav aria-label="主選單" className="flex font-tc text-sm max-md:order-last max-md:-mr-3 max-md:-ml-4 max-md:grid max-md:basis-full max-md:grid-cols-3 max-md:border-t max-md:border-line">
             {nav('work', '#/', '工作台')}{nav('lookup', '#/lookup', '單筆查詢')}{nav('settings', '#/settings', '設定')}{nav('mcp', '#/mcp', 'MCP')}{nav('guide', '#/guide', '說明')}{me.admin && nav('admin', '#/admin', '管理頁')}
           </nav>
-          <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2 py-2.5">
-            {!!health?.throttled?.length && <span title="免費額度用完或被限流，書目查詢暫時少了這些來源；在伺服器設定 API key 可解除。" className="flex h-8 items-center gap-2 bg-[#FEF3C7] px-3 font-tc text-xs text-[#854D0E]">
-              <Mark shape="tri" color="#B54708" size={8} />限流 <span className="font-mono">{health.throttled.map(t => sourceName(t.source)).join('、')}</span></span>}
-            {health && <span className="flex h-8 items-center gap-2 bg-mist px-3 font-mono text-xs">
-              <Mark shape="circle" color={health.opencode ? '#0E7C47' : '#C8281E'} size={8} />OpenCode <span className="text-graphite">{modelName(health.model) || '離線'}</span></span>}
-            <span className="text-sm text-graphite">{me.username}</span>
-            <button type="button" className={btn.ghost} onClick={() => { setToken(''); location.reload() }}>登出</button>
+          <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2 py-2.5 max-md:flex-nowrap max-md:gap-x-2.5 max-md:py-0">
+            {!!health?.throttled?.length && <span title="免費額度用完或被限流，書目查詢暫時少了這些來源；在伺服器設定 API key 可解除。" className="flex h-8 items-center gap-2 bg-[#FEF3C7] px-3 font-tc text-xs text-[#854D0E] max-md:h-7 max-md:px-2.5">
+              <Mark shape="tri" color="#B54708" size={8} />限流 <span className="font-mono max-md:hidden">{health.throttled.map(t => sourceName(t.source)).join('、')}</span></span>}
+            {health && <span className="flex h-8 items-center gap-2 bg-mist px-3 font-mono text-xs max-md:h-7 max-md:px-2.5 max-md:text-[11px]">
+              <Mark shape="circle" color={health.opencode ? '#0E7C47' : '#C8281E'} size={8} />OpenCode <span className="text-graphite max-md:hidden">{modelName(health.model) || '離線'}</span></span>}
+            <span className="text-sm text-graphite max-md:hidden">{me.username}</span>
+            <button type="button" className={`${btn.ghost} max-md:hidden`} onClick={() => { setToken(''); location.reload() }}>登出</button>
+            <details className="relative md:hidden">
+              <summary aria-label={`帳號選單（${me.username}）`} className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full bg-ink text-[15px] font-semibold text-white [&::-webkit-details-marker]:hidden">{me.username.slice(0, 1).toUpperCase()}</summary>
+              <div className="absolute top-full right-0 z-30 mt-1 flex min-w-40 flex-col gap-3 border-2 border-ink bg-white p-4">
+                <span className="text-sm text-graphite">{me.username}</span>
+                <button type="button" className={btn.ghost} onClick={() => { setToken(''); location.reload() }}>登出</button>
+              </div>
+            </details>
           </div>
         </div>
       </header>
-      <main className={`mx-auto px-6 pt-8 pb-20 ${wide ? 'max-w-[1360px]' : 'max-w-[1080px]'}`}>{children}</main>
+      <main className={`mx-auto px-6 pt-8 pb-20 max-md:px-4 max-md:pt-5 max-md:pb-16 ${wide ? 'max-w-[1360px]' : 'max-w-[1080px]'}`}>{children}</main>
     </div>
   )
 }

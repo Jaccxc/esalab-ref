@@ -67,12 +67,12 @@ export function SharePage({ token }: { token: string }) {
   return (
     <div className="min-h-screen bg-white text-ink">
       <header className="border-b border-line">
-        <div className="mx-auto flex min-h-16 max-w-[1360px] flex-wrap items-center gap-x-7 px-6">
+        <div className="mx-auto flex min-h-16 max-w-[1360px] flex-wrap items-center gap-x-7 px-6 max-md:min-h-14 max-md:px-4">
           <span className="flex items-center gap-3"><Logo /><span className="text-base font-semibold">ESA Lab</span><span className="bg-mist px-1.5 py-0.5 font-mono text-[11px] text-dim">SHARED</span></span>
           <a href="#/" className={`${btn.outline} ml-auto min-h-9 px-3.5 text-[13px]`}>我也要修參考文獻 →</a>
         </div>
       </header>
-      <main className="mx-auto max-w-[1360px] px-6 pt-8 pb-20">
+      <main className="mx-auto max-w-[1360px] px-6 pt-8 pb-20 max-md:px-4 max-md:pt-5 max-md:pb-16">
         {err ? <p className="font-tc text-fail">{err === 'Not Found' ? '這個分享連結不存在，或原本的工作已被刪除。' : err}</p>
           : !sh ? <p className="font-tc text-dim">載入中…</p>
           : <div className="flex flex-col gap-10">
