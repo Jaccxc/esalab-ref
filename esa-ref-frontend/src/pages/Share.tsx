@@ -35,7 +35,7 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
   return (
     <dialog ref={ref} onClose={onClose} onClick={e => { if (e.target === ref.current) onClose() }}
       className="m-auto w-[min(720px,calc(100vw-32px))] border-2 border-ink bg-white p-0 text-ink backdrop:bg-[rgba(11,11,13,0.45)]">
-      <div className="flex flex-col gap-5 p-7">
+      <div className="flex flex-col gap-5 p-7 max-md:gap-4 max-md:p-4">
         <div className="flex items-center gap-3"><Mark shape="square" color="#2F4BF0" size={12} /><h2 className="m-0 font-tc text-xl font-bold">分享這篇的修訂報告</h2>
           <button type="button" aria-label="關閉" onClick={onClose} className="ml-auto flex size-9 cursor-pointer items-center justify-center border border-edge bg-white text-lg text-dim">×</button></div>
         {err && <p className="m-0 font-mono text-sm text-fail">{err}</p>}
@@ -48,10 +48,10 @@ export function ShareDialog({ id, open, onClose }: { id: string; open: boolean; 
             </div>
             <p className="m-0 font-tc text-xs text-graphite">打開連結的人會看到跟你一模一樣的這一頁，但不能下載修訂後的 .docx。圖片保留 30 天，之後需要時會重新產生。</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {'share' in navigator && <button type="button" onClick={native} className={btn.outline}>分享到…</button>}
-            {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex min-h-11 items-center gap-2.5 px-4 font-tc text-sm font-bold text-white no-underline"><Brand k={k} />{label}</a>)}
-            <a href={share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto`}>下載圖片 ↓</a>
+          <div className="flex flex-wrap gap-2 max-md:grid max-md:grid-cols-2">
+            {'share' in navigator && <button type="button" onClick={native} className={`${btn.outline} max-md:col-span-2 max-md:justify-center`}>分享到…</button>}
+            {CH.map(([k, label, color, f]) => <a key={k} href={f(url, blurb)} target="_blank" rel="noopener" onClick={() => hit(k)} style={{ background: color }} className="btn inline-flex min-h-11 items-center gap-2.5 px-4 font-tc text-sm font-bold text-white no-underline max-md:justify-center"><Brand k={k} />{label}</a>)}
+            <a href={share.cardUrl(sh.token)} download={`esalab-${sh.job.filename.replace(/\.docx$/i, '')}.png`} onClick={() => hit('image')} className={`${btn.ghost} ml-auto max-md:col-span-2 max-md:ml-0 max-md:justify-center`}>下載圖片 ↓</a>
           </div>
         </>}
       </div>
